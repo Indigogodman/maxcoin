@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+. /usr/share/debconf/confmodule
+
+case "$1" in
+  install)
+    getent passwd emc >/dev/null || {
+      groupadd -r emc && useradd -r -m -d /var/lib/emc -k /dev/null -s /bin/false -g emc emc
+    }
+    [ ! -f /etc/ssl/emc/supermaxcoin.key ] || [ ! -f /etc/ssl/emc/supermaxcoin.crt ] && {
+      mkdir -p /etc/ssl/emc
+      openssl req -nodes -x509 -newkey rsa:4096 -keyout /etc/ssl/emc/supermaxcoin.key -out /etc/ssl/emc/supermaxcoin.crt -days 3560 -subj /C=CY/L=Nicosia/O=supermaxcoin/CN=supermaxcoin.local >/dev/null 2>&1
+      chown emc.emc /etc/ssl/emc/supermaxcoin.key /etc/ssl/emc/supermaxcoin.crt
+      chmod 600 /etc/ssl/emc/supermaxcoin.key
+    }
+    touch /var/tmp/supermaxcoin-install.flag
+  ;;
+esac
+
+exit 0

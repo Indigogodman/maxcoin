@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -e
+. /usr/share/debconf/confmodule
+
+case "$1" in
+  remove|deconfigure|abort-install)
+    rm -f /var/tmp/supermaxcoin-install.flag
+    pkill -9 -u emc > /dev/null 2>&1 || true
+    getent passwd emc >/dev/null && userdel emc >/dev/null 2>&1 || true
+    rm -f /etc/ssl/emc/supermaxcoin.key /etc/ssl/emc/supermaxcoin.crt /etc/supermaxcoin/supermaxcoin.conf /etc/supermaxcoin/certs
+  ;;
+esac
+
+exit 0

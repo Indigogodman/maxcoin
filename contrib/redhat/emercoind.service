@@ -1,0 +1,15 @@
+[Unit]
+Description=supermaxcoin Wallet
+After=network.target
+
+[Service]
+Type=forking
+User=emc
+ExecStart=/usr/bin/supermaxcoind -daemon -datadir=/var/lib/emc/.supermaxcoin -conf=/var/lib/emc/.supermaxcoin/supermaxcoin.conf -pid=/var/lib/emc/.supermaxcoin/supermaxcoind.pid
+ExecStop=/usr/bin/supermaxcoin-cli -datadir=/var/lib/emc/.supermaxcoin stop
+ExecReload=/usr/bin/kill -HUP $MAINPID
+PIDFile=/var/lib/emc/.supermaxcoin/supermaxcoind.pid
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -e
+. /usr/share/debconf/confmodule
+
+case "$1" in
+  configure)
+    sed -i -e "s/\(^rpcpassword=MySuperPassword\)\(.*\)/rpcpassword=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)/" /var/lib/emc/.supermaxcoin/supermaxcoin.conf
+    chmod 600 /var/lib/emc/.supermaxcoin/supermaxcoin.conf
+    chown -R emc.emc /var/lib/emc/.supermaxcoin /usr/bin/supermaxcoin-cli
+    chmod 4750 /usr/bin/supermaxcoin-cli
+    mkdir -p /etc/supermaxcoin
+    ln -sf /var/lib/emc/.supermaxcoin/supermaxcoin.conf /etc/supermaxcoin/supermaxcoin.conf || true
+    ln -sf /etc/ssl/emc /etc/supermaxcoin/certs || true
+    systemctl daemon-reload
+    [ -f /var/tmp/supermaxcoin-install.flag ] && {
+      rm -f /var/tmp/supermaxcoin-install.flag
+      systemctl enable supermaxcoind
+    }
+    systemctl status supermaxcoind >/dev/null 2>&1 && systemctl restart supermaxcoind || {
+      systemctl is-enabled supermaxcoind >/dev/null 2>&1 && systemctl start supermaxcoind || true
+    }
+  ;;
+esac
+
+exit 0

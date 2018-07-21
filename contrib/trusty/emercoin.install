@@ -1,0 +1,7 @@
+contrib/trusty/emc usr/bin
+contrib/trusty/supermaxcoin.conf var/lib/emc/.supermaxcoin
+contrib/trusty/supermaxcoind etc/init.d
+contrib/trusty/supermaxcoind.logrotate etc/logrotate.d
+usr/local/bin/supermaxcoind usr/bin
+usr/local/bin/supermaxcoin-cli usr/bin
+usr/local/bin/supermaxcoin-tx usr/bin

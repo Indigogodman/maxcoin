@@ -1,0 +1,7 @@
+contrib/debian/emc usr/bin
+contrib/debian/supermaxcoin.conf var/lib/emc/.supermaxcoin
+contrib/debian/supermaxcoind.service lib/systemd/system
+contrib/debian/supermaxcoind.logrotate etc/logrotate.d
+usr/local/bin/supermaxcoind usr/bin
+usr/local/bin/supermaxcoin-cli usr/bin
+usr/local/bin/supermaxcoin-tx usr/bin
